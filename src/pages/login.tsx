@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Checkbox, Form, Input, Typography } from "antd";
-import { LockOutlined, MailOutlined } from "@ant-design/icons";
+import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import './login.css';
 
 const { Text, Title, Link } = Typography;
@@ -79,7 +79,7 @@ const Login: React.FC<LoginProps> = () => {
               },
             ]}
           >
-            <Input prefix={<MailOutlined />} placeholder="Username" />
+            <Input prefix={< UserOutlined/>} placeholder="Username" />
           </Form.Item>
           <Form.Item
             name="password"
