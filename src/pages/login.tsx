@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Button, Checkbox, Form, Input, Typography } from "antd";
+import { Button, Checkbox, Form, Input, Typography, message, Space } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import './login.css';
+import { useNavigate } from "react-router-dom";
 
 const { Text, Title, Link } = Typography;
 
@@ -9,6 +10,8 @@ interface LoginProps {}
 
 const Login: React.FC<LoginProps> = () => {
     const [loading, setLoading] = useState<boolean>(false);
+    const [messageApi, contextHolder] = message.useMessage();
+    const navigate = useNavigate();
     const onFinish = async (values: any) => {
         setLoading(true);
       try {
@@ -26,6 +29,18 @@ const Login: React.FC<LoginProps> = () => {
   
         const data = await response.json();
         console.log('API Response:', data);
+        if (data.type === 'success') {
+          setTimeout(() => {
+            navigate('/dashboard'); // Navigate to '/dashboard' route after 2 seconds
+          }, 1000);
+        }
+        const alertmsg = () => {
+          messageApi.open({
+            type: data.type,
+            content: data.message,
+          });
+        };
+        alertmsg();
       } catch (error) {
         console.error('Error:', error);
       }
@@ -61,6 +76,8 @@ const Login: React.FC<LoginProps> = () => {
             Welcome back to L&T!
           </Text>
         </div>
+        {contextHolder}
+        <Space>
         <Form
           name="normal_login"
           initialValues={{
@@ -107,6 +124,7 @@ const Login: React.FC<LoginProps> = () => {
             </Button>
           </Form.Item>
         </Form>
+        </Space>
       </div>
     </section>
   );
