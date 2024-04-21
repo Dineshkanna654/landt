@@ -33,6 +33,7 @@
     border-radius: 20px;
 }
 
-/* .select-status{
-    width: 30px;
-} */
+.completed-order{
+    padding: 10px;
+    cursor: pointer;
+}
