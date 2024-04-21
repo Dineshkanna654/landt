@@ -3,6 +3,7 @@ import Header from '../components/header';
 import './dashboard.css';
 import StockIndication from '../components/stockIndication';
 import { Button, Form, Input, Select, Alert, Modal } from 'antd';
+import Camera from '../components/camera';
 
 const Dashboard: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -87,7 +88,7 @@ const Dashboard: React.FC = () => {
         </div>
 
         <div className='camera-table-search'>
-            
+            <Camera/>
         </div>
 
       </div>

@@ -1,0 +1,12 @@
+.live-camera{
+    padding: 10px;
+    width: 385px;
+    height: 50px;
+    display: flex;
+    flex-direction: column;
+}
+
+video{
+    border-radius: 20px;
+    margin-bottom: 10px;
+}
