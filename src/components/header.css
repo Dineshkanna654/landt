@@ -1,0 +1,44 @@
+header{
+        background-color: rgb(255, 255, 255);
+        display: flex;
+        width: calc(100% - 100px);
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 18px;
+        margin-left: 33px;
+        margin-top: 15px;
+        z-index: 2;
+        padding: 15px;
+}
+
+.head-container header nav ul {
+    width: 400px;
+    list-style-type: none; 
+    padding: 0; 
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+    margin-right: 9px;
+}
+
+.logo{
+    height: 20px;
+    width: 20px;
+    padding: 3px;
+    background-image: url('loo-removebg-preview.png');
+    z-index: 3;
+}
+
+.head-container header nav ul li a{
+    text-decoration: none;
+    font-size: medium;
+    font-weight: 600;
+}
+
+.head-container header nav ul li a:hover {
+    color: rgb(243, 0, 0); 
+  }
+
+.head-container header nav ul li a.active {
+    color: rgb(243, 0, 0);
+  }

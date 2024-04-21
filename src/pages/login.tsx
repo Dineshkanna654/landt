@@ -31,7 +31,7 @@ const Login: React.FC<LoginProps> = () => {
         console.log('API Response:', data);
         if (data.type === 'success') {
           setTimeout(() => {
-            navigate('/dashboard'); // Navigate to '/dashboard' route after 2 seconds
+            navigate('/dashboard');
           }, 1000);
         }
         const alertmsg = () => {

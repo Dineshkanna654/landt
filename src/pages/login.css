@@ -18,7 +18,7 @@
     align-items: center;
     z-index: 2;
     background-color: rgba(255, 255, 255, 0.301);
-    opacity: 2;
+    /* opacity: 2; */
 }
 
 .login-section{
@@ -39,7 +39,7 @@
     font-weight: 800;
 }
 
-body {
+body .login-section{
     background-image: url('back.jpg');
     background-size: cover;
     background-repeat: no-repeat;
