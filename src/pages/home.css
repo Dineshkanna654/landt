@@ -6,6 +6,7 @@
 
 .paper{
     background-color: rgb(255, 255, 255);
+    padding: 10px;
     display: flex;
     flex-wrap: wrap;
     width: calc(100% - 70px);
@@ -14,13 +15,16 @@
     margin-top: 15px;
     height: calc(100% - 120px);
     /* overflow-y: scroll; */
+    justify-content: space-between;
+
 }
 
 .start-stop{
-    padding: 10px;
-    width: calc(100% - 600px);
+    /* padding: 10px; */
+    width: fit-content;
 }
 
 .start, .stop{
     margin: 10px;
 }
+
