@@ -1,8 +1,9 @@
 import React, { useRef, useState } from 'react';
 import './camera.css';
-import { Button, Modal } from 'antd';
+import { Button, Form, Input, Modal, Space } from 'antd';
 import type { DraggableData, DraggableEvent } from 'react-draggable';
 import Draggable from 'react-draggable';
+import SubmitButton from './submitButton';
 
 const Camera: React.FC = () => {
     const videoRef = useRef<HTMLVideoElement>(null);
@@ -10,6 +11,7 @@ const Camera: React.FC = () => {
     const [disabled, setDisabled] = useState(true);
     const [bounds, setBounds] = useState({ left: 0, top: 0, bottom: 0, right: 0 });
     const draggleRef = useRef<HTMLDivElement>(null);
+    const [form] = Form.useForm();
 
 
     const showModal = () => {
@@ -103,7 +105,23 @@ const Camera: React.FC = () => {
                     footer={null}
                 >
                     <div className='search-form'>
-                        
+                        <Form form={form} name="validateOnly" layout="vertical" autoComplete="off">
+                            <Form.Item name="rackNumber" label="Rack Number:" rules={[{ required: true }]}>
+                                <Input />
+                            </Form.Item>
+                            <Form.Item name="columnNumber" label="Column Number:" rules={[{ required: true }]}>
+                                <Input />
+                            </Form.Item>
+                            <Form.Item name="itemNumber" label="Item Number:" rules={[{ required: true }]}>
+                                <Input />
+                            </Form.Item>
+                            <Form.Item>
+                                <Space>
+                                    <SubmitButton form={form}>Submit</SubmitButton>
+                                    <Button htmlType="reset">Reset</Button>
+                                </Space>
+                            </Form.Item>
+                        </Form>
                     </div>
                 </Modal>
             </div>
