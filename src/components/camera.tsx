@@ -4,6 +4,48 @@ import { Button, Form, Input, Modal, Space } from 'antd';
 import type { DraggableData, DraggableEvent } from 'react-draggable';
 import Draggable from 'react-draggable';
 import SubmitButton from './submitButton';
+import { Table, Divider, Tag } from 'antd';
+
+
+const columns = [
+    {
+        title: 'Rack Number',
+        dataIndex: 'name',
+        key: 'name',
+        render: (text: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined) => <a>{text}</a>,
+    },
+    {
+        title: 'Prediction Result',
+        dataIndex: 'age',
+        key: 'age',
+    },
+    {
+        title: 'Colour',
+        dataIndex: 'address',
+        key: 'address',
+    },
+];
+
+const data = [
+    {
+        key: '1',
+        name: '1',
+        age: 'Hardware',
+        address: <p style={{ color: 'green' }}>Green</p>,
+    },
+    {
+        key: '2',
+        name: '2',
+        age: 'Tools',
+        address: <p style={{ color: 'green' }}>Green</p>,
+    },
+    {
+        key: '3',
+        name: '3',
+        age: 'Pen drives',
+        address:<p style={{ color: 'green' }}>Green</p>,
+    },
+];
 
 const Camera: React.FC = () => {
     const videoRef = useRef<HTMLVideoElement>(null);
@@ -25,7 +67,7 @@ const Camera: React.FC = () => {
 
     const handleCancelTable = () => {
         setIsModalOpen(false);
-      };
+    };
 
     const handleOk = (e: React.MouseEvent<HTMLElement>) => {
         console.log(e);
@@ -138,10 +180,10 @@ const Camera: React.FC = () => {
 
             <div className='table-modal'>
                 <Button type="primary" onClick={showModalTable}>
-                    Open Modal
+                    Click for the Prediction Table
                 </Button>
                 <Modal title="Prediction Table" open={isModalOpen} footer={null} onCancel={handleCancelTable}>
-                    
+                    <Table columns={columns} dataSource={data} />
                 </Modal>
             </div>
 
