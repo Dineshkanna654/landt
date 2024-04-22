@@ -37,7 +37,7 @@ video{
     height: 100%;
 }
 
-.search-item{
+.search-item, .table-modal{
     width: 385px;
     display: flex;
     flex-wrap: wrap;

@@ -12,11 +12,20 @@ const Camera: React.FC = () => {
     const [bounds, setBounds] = useState({ left: 0, top: 0, bottom: 0, right: 0 });
     const draggleRef = useRef<HTMLDivElement>(null);
     const [form] = Form.useForm();
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
 
     const showModal = () => {
         setOpen(true);
     };
+
+    const showModalTable = () => {
+        setIsModalOpen(true);
+    };
+
+    const handleCancelTable = () => {
+        setIsModalOpen(false);
+      };
 
     const handleOk = (e: React.MouseEvent<HTMLElement>) => {
         console.log(e);
@@ -123,6 +132,16 @@ const Camera: React.FC = () => {
                             </Form.Item>
                         </Form>
                     </div>
+                </Modal>
+            </div>
+            <br /><br />
+
+            <div className='table-modal'>
+                <Button type="primary" onClick={showModalTable}>
+                    Open Modal
+                </Button>
+                <Modal title="Prediction Table" open={isModalOpen} footer={null} onCancel={handleCancelTable}>
+                    
                 </Modal>
             </div>
 
