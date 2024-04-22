@@ -1,21 +1,15 @@
 import React, { useRef, useState } from 'react';
 import './camera.css';
+import { Button, Modal } from 'antd';
 import type { DraggableData, DraggableEvent } from 'react-draggable';
 import Draggable from 'react-draggable';
-import { Button, Form, Input, Space, Modal } from 'antd';
-import type { FormInstance } from 'antd';
 
-interface SubmitButtonProps {
-    form: FormInstance;
-  }
-
-const Camera: React.FC<React.PropsWithChildren<SubmitButtonProps>> = ({ form, children }) => {
+const Camera: React.FC = () => {
     const videoRef = useRef<HTMLVideoElement>(null);
     const [open, setOpen] = useState(false);
     const [disabled, setDisabled] = useState(true);
     const [bounds, setBounds] = useState({ left: 0, top: 0, bottom: 0, right: 0 });
     const draggleRef = useRef<HTMLDivElement>(null);
-    const [submittable, setSubmittable] = React.useState<boolean>(false);
 
 
     const showModal = () => {
@@ -32,7 +26,6 @@ const Camera: React.FC<React.PropsWithChildren<SubmitButtonProps>> = ({ form, ch
         setOpen(false);
     };
 
-    const values = Form.useWatch([], form);
 
     const onStart = (event: DraggableEvent, uiData: DraggableData) => {
         const { clientWidth, clientHeight } = window.document.documentElement;
@@ -59,13 +52,6 @@ const Camera: React.FC<React.PropsWithChildren<SubmitButtonProps>> = ({ form, ch
             console.error('Error accessing camera:', error);
         }
     };
-
-    React.useEffect(() => {
-        form
-          .validateFields({ validateOnly: true })
-          .then(() => setSubmittable(true))
-          .catch(() => setSubmittable(false));
-      }, [form, values]);
 
     return (
         <div className='main-left-container'>
