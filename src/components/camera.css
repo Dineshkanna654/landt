@@ -29,3 +29,17 @@ video{
     width: 385px;
     justify-content: center;
 } */
+
+.main-left-container{
+    /* padding: 10px; */
+    width: 385px;
+    /* padding: 10px; */
+    height: 100%;
+}
+
+.search-item{
+    width: 385px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}

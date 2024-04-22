@@ -18,11 +18,16 @@ const Camera: React.FC = () => {
 
     return (
     <div className='main-left-container'>
-        <div className='search-item'></div>
+
         <div className='live-camera'>
         <video ref={videoRef} autoPlay playsInline />
         <Button onClick={handleStartCamera}>Open Camera</Button>
+        </div><br /><br /> <br />
+
+        <div className='search-item'>
+        <Button type="primary">Search Prediction Result</Button>
         </div>
+
     </div>
     );
 }
