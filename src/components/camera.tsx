@@ -1,9 +1,53 @@
 import React, { useRef, useState } from 'react';
 import './camera.css';
-import { Button } from 'antd';
+import type { DraggableData, DraggableEvent } from 'react-draggable';
+import Draggable from 'react-draggable';
+import { Button, Form, Input, Space, Modal } from 'antd';
+import type { FormInstance } from 'antd';
 
-const Camera: React.FC = () => {
+interface SubmitButtonProps {
+    form: FormInstance;
+  }
+
+const Camera: React.FC<React.PropsWithChildren<SubmitButtonProps>> = ({ form, children }) => {
     const videoRef = useRef<HTMLVideoElement>(null);
+    const [open, setOpen] = useState(false);
+    const [disabled, setDisabled] = useState(true);
+    const [bounds, setBounds] = useState({ left: 0, top: 0, bottom: 0, right: 0 });
+    const draggleRef = useRef<HTMLDivElement>(null);
+    const [submittable, setSubmittable] = React.useState<boolean>(false);
+
+
+    const showModal = () => {
+        setOpen(true);
+    };
+
+    const handleOk = (e: React.MouseEvent<HTMLElement>) => {
+        console.log(e);
+        setOpen(false);
+    };
+
+    const handleCancel = (e: React.MouseEvent<HTMLElement>) => {
+        console.log(e);
+        setOpen(false);
+    };
+
+    const values = Form.useWatch([], form);
+
+    const onStart = (event: DraggableEvent, uiData: DraggableData) => {
+        const { clientWidth, clientHeight } = window.document.documentElement;
+        const targetRect = draggleRef.current?.getBoundingClientRect();
+        if (!targetRect) {
+            return;
+        }
+        setBounds({
+            left: -targetRect.left + uiData.x,
+            right: clientWidth - (targetRect.right - uiData.x),
+            top: -targetRect.top + uiData.y,
+            bottom: clientHeight - (targetRect.bottom - uiData.y),
+        });
+    };
+
 
     const handleStartCamera = async () => {
         try {
@@ -16,19 +60,69 @@ const Camera: React.FC = () => {
         }
     };
 
+    React.useEffect(() => {
+        form
+          .validateFields({ validateOnly: true })
+          .then(() => setSubmittable(true))
+          .catch(() => setSubmittable(false));
+      }, [form, values]);
+
     return (
-    <div className='main-left-container'>
+        <div className='main-left-container'>
 
-        <div className='live-camera'>
-        <video ref={videoRef} autoPlay playsInline />
-        <Button onClick={handleStartCamera}>Open Camera</Button>
-        </div><br /><br /> <br />
+            <div className='live-camera'>
+                <video ref={videoRef} autoPlay playsInline />
+                <Button onClick={handleStartCamera}>Open Camera</Button>
+            </div><br /><br /> <br />
 
-        <div className='search-item'>
-        <Button type="primary">Search Prediction Result</Button>
+            <div className='search-item'>
+                <Button type="primary" onClick={showModal}>Search Prediction Result</Button>
+                <Modal
+                    title={
+                        <div
+                            style={{
+                                width: '100%',
+                                cursor: 'move',
+                            }}
+                            onMouseOver={() => {
+                                if (disabled) {
+                                    setDisabled(false);
+                                }
+                            }}
+                            onMouseOut={() => {
+                                setDisabled(true);
+                            }}
+                            // fix eslintjsx-a11y/mouse-events-have-key-events
+                            // https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/master/docs/rules/mouse-events-have-key-events.md
+                            onFocus={() => { }}
+                            onBlur={() => { }}
+                        // end
+                        >
+                            Search Prediction Result
+                        </div>
+                    }
+                    open={open}
+                    onOk={handleOk}
+                    onCancel={handleCancel}
+                    modalRender={(modal: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined) => (
+                        <Draggable
+                            disabled={disabled}
+                            bounds={bounds}
+                            nodeRef={draggleRef}
+                            onStart={(event: DraggableEvent, uiData: DraggableData) => onStart(event, uiData)}
+                        >
+                            <div ref={draggleRef}>{modal}</div>
+                        </Draggable>
+                    )}
+                    footer={null}
+                >
+                    <div className='search-form'>
+                        
+                    </div>
+                </Modal>
+            </div>
+
         </div>
-
-    </div>
     );
 }
 
