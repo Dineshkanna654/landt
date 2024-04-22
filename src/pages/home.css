@@ -9,11 +9,11 @@
     padding: 10px;
     display: flex;
     flex-wrap: wrap;
-    width: calc(100% - 70px);
+    /* width: calc(100% - 70px); */
     border-radius: 25px;
     margin-left: 33px;
     margin-top: 15px;
-    height: calc(100% - 120px);
+    height: calc(100% - 130px);
     /* overflow-y: scroll; */
     justify-content: space-between;
 
