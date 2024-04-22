@@ -1,12 +1,31 @@
 .live-camera{
     padding: 10px;
     width: 385px;
-    height: 50px;
+    height: 289px;
     display: flex;
+    /* justify-content: center; */
+    /* align-items: center; */
     flex-direction: column;
 }
 
 video{
     border-radius: 20px;
     margin-bottom: 10px;
+    width: 385px;
+    height: 289px;
+    background-color: aliceblue;
+    border: 2px solid blue;
+    background-image: url('camera.jpeg'); 
+    background-repeat: no-repeat;
+    background-size: 385px 240px; 
 }
+
+/* .camera-btn{
+    margin-right: 20px;
+} */
+
+/* .live-camera div{
+    display: flex;
+    width: 385px;
+    justify-content: center;
+} */
