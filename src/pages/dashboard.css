@@ -13,7 +13,7 @@
     margin-left: 33px;
     margin-top: 15px;
     height: calc(100% - 130px);
-    /* overflow-y: scroll; */
+    overflow: hidden;
 }
 
 .stock-indication{

@@ -3,6 +3,7 @@ import { Document, Page, pdfjs } from 'react-pdf';
 import jsPDF from 'jspdf';
 import Header from '../components/header';
 import './billing.css';
+import { Button } from 'antd';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -30,7 +31,6 @@ const Invoice = () => {
     doc.text(`Quantity: ${quantity}`, 10, 50);
     doc.text(`GST: ${gst}%`, 10, 60);
     doc.text(`Tax: ${tax}`, 10, 70);
-    // You can add more content as needed
     const pdfDataUri = doc.output('datauristring');
     setPageNumber(1);
     setNumPages(1);
@@ -52,15 +52,15 @@ const Invoice = () => {
       <div className='paper'>
         <h1>Invoice</h1>
         <div className='pdf-btn'>
-        <button onClick={generatePDF}>Generate PDF</button>
+        <Button type='primary' onClick={generatePDF}>Generate PDF</Button>
         </div>
         {pdfUrl && (
           <div className='pdf'>
-            <Document file={pdfUrl} onLoadSuccess={onDocumentLoadSuccess}>
+            <Document file={pdfUrl} onLoadSuccess={onDocumentLoadSuccess} className='invoice-doc'>
               <Page pageNumber={pageNumber} />
             </Document>
             <p>Page {pageNumber} of {numPages}</p>
-            <button onClick={handlePrint}>Print</button>
+            <Button type='primary' onClick={handlePrint}>Print</Button>
           </div>
         )}
       </div>

@@ -1,6 +1,15 @@
+
 .pdf{
     height: 100%;
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
+    /* background-color: aquamarine; */
+}
+
+.invoice-doc{
+    /* max-height: 100px; */
+    display: flex;
+    background-color: rgb(0, 124, 233);
+    flex-wrap: wrap;
 }
