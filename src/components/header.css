@@ -22,10 +22,8 @@ header{
 }
 
 .logo{
-    height: 20px;
-    width: 20px;
-    padding: 3px;
-    background-image: url('loo-removebg-preview.png');
+    /* padding: 3px; */
+    /* background-image: url('loo-removebg-preview.png'); */
     z-index: 3;
 }
 
