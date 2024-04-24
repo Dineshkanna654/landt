@@ -4,6 +4,7 @@ import jsPDF from "jspdf"; // Import jspdf library
 import Header from "../components/header";
 import "./billing.css";
 import { Button, Image } from "antd";
+import html2canvas from "html2canvas";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -27,11 +28,28 @@ const Invoice = () => {
   ];
 
   const generatePDF = async () => {
-    const doc = new jsPDF();
     const content = document.querySelector(".pdf") as HTMLElement; // Type assertion
     if (content) {
-      doc.text(content.innerText, 10, 10); // Add text from the content div to PDF
-      doc.save("invoice.pdf"); // Save the PDF with name 'invoice.pdf'
+      html2canvas(content).then((canvas) => {
+        const imgData = canvas.toDataURL("");
+        const pdf = new jsPDF();
+        const imgWidth = 210;
+        const pageHeight = 295;
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        let heightLeft = imgHeight;
+        let position = 0;
+  
+        pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+  
+        while (heightLeft >= 0) {
+          position = heightLeft - imgHeight;
+          pdf.addPage();
+          pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+          heightLeft -= pageHeight;
+        }
+        pdf.save("invoice.pdf");
+      });
     }
   };
 
