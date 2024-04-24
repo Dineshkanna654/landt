@@ -4,6 +4,7 @@
         "antd",
         "Colour",
         "datauristring",
+        "Genarate",
         "jspdf"
     ]
 }
