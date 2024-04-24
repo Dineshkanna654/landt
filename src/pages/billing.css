@@ -28,12 +28,18 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    
     justify-content: center;
+    transform: translateX(-11px);
 }
 
 .pdf-header{
     display: flex;
     justify-content: space-between;
+}
+
+thead{
+    background-color: rgb(201, 186, 214);
 }
 
 .head-content-pdf{
@@ -42,8 +48,17 @@
     flex-direction: column;
 }
 
+table{
+    color: blueviolet;
+    border-collapse: collapse; 
+}
+
 .invoice-right-top-data div{
     text-align: right;
+}
+
+.invoice-customer-address div{
+    text-align: left;
 }
 
 .pdf-download-button{
