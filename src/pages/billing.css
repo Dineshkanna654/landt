@@ -13,7 +13,7 @@
 }
 
 .pdf{
-    border: 2px solid burlywood;
+    /* border: 2px solid burlywood; */
     display: flex;
     padding: 10px;
     flex-direction: column;
@@ -25,6 +25,10 @@
 
 .pdf-header-logo{
     width: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .pdf-header{
@@ -35,6 +39,11 @@
 .head-content-pdf{
     display: flex;
     width: fit-content;
+    flex-direction: column;
+}
+
+.invoice-right-top-data div{
+    text-align: right;
 }
 
 .pdf-download-button{
