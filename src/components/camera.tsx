@@ -4,9 +4,11 @@ import { Button, Form, Input, Modal, Space } from 'antd';
 import type { DraggableData, DraggableEvent } from 'react-draggable';
 import Draggable from 'react-draggable';
 import SubmitButton from './submitButton';
-import { Table, Divider, Tag } from 'antd';
+import { Table, message } from 'antd';
 import jsQR from "jsqr";
 
+
+const msg = message
 
 const columns = [
     {
@@ -59,6 +61,7 @@ const Camera: React.FC = () => {
     const [message, setMessage] = useState<string>("");
     const [qrData, setQrData] = useState('');
     const [error, setError] = useState('');
+    const [messageApi, contextHolder] = msg.useMessage();
 
 
     const capture = () => {
@@ -66,7 +69,7 @@ const Camera: React.FC = () => {
             // Check for QR code and capture image if found
             captureImageIfQRCodeDetected();
             apiCallQrData();
-        }, 3000);
+        }, 7000);
 
         return () => clearInterval(interval); // Cleanup the interval on component unmount
     };
@@ -75,10 +78,25 @@ const Camera: React.FC = () => {
         capture();
     }, []);
 
+
+    const warning = () => {
+        messageApi.open({
+          type: 'error',
+          content: 'Oops! Some thing went wrong! Contact your Developer!',
+        });
+      };
+
     const apiCallQrData = async () => {
         try {
             const imageData = await captureImageIfQRCodeDetected();
             if (!(imageData instanceof Blob)) {
+                const falidtocap = () => {
+                    messageApi.open({
+                      type: 'error',
+                      content: 'Failed to capture image data',
+                    });
+                  };
+                  falidtocap();
                 throw new Error('Failed to capture image data');
             }
             
@@ -91,6 +109,7 @@ const Camera: React.FC = () => {
             });
     
             if (!response.ok) {
+                warning();
                 throw new Error('Failed to scan QR code');
             }
     
@@ -100,6 +119,7 @@ const Camera: React.FC = () => {
             setError('');
         } catch (error) {
             console.error('Error:', error);
+            warning();
             setError('Failed to scan QR code');
         }
     };
@@ -108,6 +128,13 @@ const Camera: React.FC = () => {
       const captureImageIfQRCodeDetected = () => {
         // Ensure videoRef.current is not null
         if (!videoRef.current) {
+            const VideoNot = () => {
+                messageApi.open({
+                  type: 'error',
+                  content: 'Video element not available',
+                });
+              };
+            VideoNot();
             console.error("Video element not available");
             return;
         }
@@ -121,6 +148,13 @@ const Camera: React.FC = () => {
         // Ensure ctx is not null
         if (!ctx) {
             console.error("Canvas context not available");
+            const CanvaNot = () => {
+                messageApi.open({
+                  type: 'error',
+                  content: 'Canvas context not available!',
+                });
+              };
+              CanvaNot();
             return;
         }
     
@@ -184,13 +218,19 @@ const Camera: React.FC = () => {
                 // capture();
             }
         } catch (error) {
+            const CameraError = () => {
+                messageApi.open({
+                  type: 'error',
+                  content: 'Error accessing camera!',
+                });
+              };
+              CameraError();
             console.error('Error accessing camera:', error);
         }
     };
 
     return (
         <div className='main-left-container'>
-
             <div className='live-camera'>
                 <video ref={videoRef} autoPlay playsInline />
                 <Button onClick={handleStartCamera}>Open Camera</Button>
@@ -270,10 +310,12 @@ const Camera: React.FC = () => {
             </div><br />
 
             <div className='start-stop'>
+                {contextHolder}
+            <Space>
                 <Button type='primary' className='start' onClick={capture}>Start</Button>
                 <Button type='primary' className='stop'>Stop</Button>
+            </Space>
             </div>
-
         </div>
     );
 }
