@@ -15,11 +15,6 @@ const Home: React.FC = () => {
           <StockIndication />
         </div>
 
-        <div className='start-stop'>
-          <Button type='primary' className='start'>Start</Button>
-          <Button type='primary' className='stop'>Stop</Button>
-        </div>
-
         <div className='camera-table-search' id='cam-tab'>
           <Camera />
         </div>

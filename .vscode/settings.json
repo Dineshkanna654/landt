@@ -5,6 +5,7 @@
         "Colour",
         "datauristring",
         "Genarate",
-        "jspdf"
+        "jspdf",
+        "jsqr"
     ]
 }

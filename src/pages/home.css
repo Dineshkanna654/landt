@@ -21,7 +21,9 @@
 
 .start-stop{
     /* padding: 10px; */
-    width: fit-content;
+    display: flex;
+    justify-content: center;
+    width: 100%;
 }
 
 .start, .stop{
