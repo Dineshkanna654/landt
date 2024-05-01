@@ -327,13 +327,6 @@ const Camera: React.FC = () => {
                 </Modal>
             </div><br />
 
-            <div className='start-stop'>
-                {contextHolder}
-            <Space>
-                <Button type='primary' className='start' onClick={capture}>Start</Button>
-                <Button type='primary' className='stop'>Stop</Button>
-            </Space>
-            </div>
         </div>
     );
 }

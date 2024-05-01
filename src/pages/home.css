@@ -19,14 +19,18 @@
 
 }
 
-.start-stop{
-    /* padding: 10px; */
+.navigation-control{
     display: flex;
     justify-content: center;
-    width: 100%;
+    align-items: center;
+    
+}
+.navigation-control img{
+    width: calc(100% - 300px);
+    cursor: pointer;
 }
 
-.start, .stop{
-    margin: 10px;
-}
+
+
+
 
