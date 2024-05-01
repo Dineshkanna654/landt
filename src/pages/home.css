@@ -21,13 +21,35 @@
 
 .navigation-control{
     display: flex;
-    justify-content: center;
+    /* flex-direction: column; */
     align-items: center;
+    height: fit-content;
+    width: fit-content;
+    justify-content: space-between;
     
 }
+
+.home-txt-btn{
+    display: grid;
+    gap: 20px;
+    width: fit-content;
+    margin: 30px;
+}
+
+.txt-btn{
+    width: 100%;
+}
+
 .navigation-control img{
-    width: calc(100% - 300px);
+    width: 300px;
     cursor: pointer;
+    /* margin-bottom: 20px; */
+    
+}
+
+.center-nav{
+    display: flex;
+    width: 100%;
 }
 
 
