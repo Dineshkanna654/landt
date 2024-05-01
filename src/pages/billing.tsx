@@ -109,6 +109,11 @@ const Invoice = () => {
                   <th>Amount</th>
                 </tr>
               </thead>
+              <tr>
+                <td>
+                  
+                </td>
+              </tr>
             </table>
           </div>
         </div>

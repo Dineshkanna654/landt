@@ -5,7 +5,6 @@ import type { DraggableData, DraggableEvent } from 'react-draggable';
 import Draggable from 'react-draggable';
 import SubmitButton from './submitButton';
 import { Table, message } from 'antd';
-import jsQR from "jsqr";
 
 
 const msg = message
@@ -53,6 +52,7 @@ const data = [
 const Camera: React.FC = () => {
     const videoRef = useRef<HTMLVideoElement>(null);
     const [open, setOpen] = useState(false);
+    const [isCameraOpen, setCameraState] = useState(false);
     const [disabled, setDisabled] = useState(true);
     const [bounds, setBounds] = useState({ left: 0, top: 0, bottom: 0, right: 0 });
     const draggleRef = useRef<HTMLDivElement>(null);
@@ -215,7 +215,7 @@ const Camera: React.FC = () => {
             const stream = await navigator.mediaDevices.getUserMedia({ video: true });
             if (videoRef.current) {
                 videoRef.current.srcObject = stream;
-                // capture();
+                setCameraState(true);
             }
         } catch (error) {
             const CameraError = () => {
@@ -229,11 +229,29 @@ const Camera: React.FC = () => {
         }
     };
 
+    const handleCloseCamera = () => {
+        const videoElement = videoRef.current;
+        if (videoElement && videoElement.srcObject) {
+            const stream = videoElement.srcObject as MediaStream; // Type assertion
+            const tracks = stream.getTracks();
+    
+            tracks.forEach(track => {
+                track.stop();
+            });
+    
+            videoElement.srcObject = null;
+            setCameraState(false);
+        }
+    };
+    
+    
+
     return (
         <div className='main-left-container'>
             <div className='live-camera'>
                 <video ref={videoRef} autoPlay playsInline />
-                <Button onClick={handleStartCamera}>Open Camera</Button>
+                { isCameraOpen == false && <Button onClick={handleStartCamera}>Open Camera</Button>}
+                { isCameraOpen && <Button onClick={handleCloseCamera}>Close Camera</Button>}
             </div><br /><br /> <br />
 
             <div className='search-item'>
