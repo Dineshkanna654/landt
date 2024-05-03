@@ -13,7 +13,6 @@
 }
 
 .pdf{
-    /* border: 2px solid burlywood; */
     display: flex;
     padding: 10px;
     flex-direction: column;

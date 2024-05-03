@@ -110,10 +110,38 @@ const Invoice = () => {
                 </tr>
               </thead>
               <tr>
-                <td>
-                  
-                </td>
+              <td style={{textAlign: "left", lineHeight: "50px"}}>Eutable</td>
+                  <td style={{textAlign: "center"}}>Editable</td>
+                  <td>      </td>
+                  <td style={{textAlign: "center"}}>Editable</td>
+                  <td style={{textAlign: "center"}}>Editable</td>
+                  <td style={{textAlign: "center"}}>Editable</td>
               </tr>
+              <tr>
+              <td>     </td>
+              <td>      </td>
+              <td>      </td>
+              <td style={{textAlign: "center"}}>Sub Total</td>
+              <td>      </td>
+              <td style={{textAlign: "center"}}>Editable</td>
+              </tr>
+              <tr>
+              <td>     </td>
+              <td>      </td>
+              <td>      </td>
+              <td style={{textAlign: "center", lineHeight: "50px"}}>Standard Rate</td>
+              <td>      </td>
+              <td style={{textAlign: "center"}}>Editable</td>
+              </tr>
+              <tr>
+              <td>     </td>
+              <td>      </td>
+              <td>      </td>
+              <td style={{textAlign: "center", fontWeight:"800", backgroundColor:"rgb(201, 186, 214)"}} className="TOTAL" >TOTAL</td>
+              <td className="TOTAL" style={{backgroundColor:"rgb(201, 186, 214)"}}>      </td>
+              <td style={{textAlign: "center", fontWeight:"800", backgroundColor:"rgb(201, 186, 214)"}} className="TOTAL">Editable</td>
+              </tr>
+
             </table>
           </div>
         </div>
