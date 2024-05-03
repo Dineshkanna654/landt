@@ -11,43 +11,18 @@ const msg = message
 
 const columns = [
     {
-        title: 'Rack Number',
-        dataIndex: 'name',
-        key: 'name',
-        render: (text: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined) => <a>{text}</a>,
+        title: 'Serial Number',
+        dataIndex: 'serialNumber',
+        key: 'serialNumber',
+        render: (text: any, record: any, index: number) => <span>{index + 1}</span>, // Generate serial number dynamically
     },
     {
         title: 'Prediction Result',
-        dataIndex: 'age',
-        key: 'age',
-    },
-    {
-        title: 'Colour',
-        dataIndex: 'address',
-        key: 'address',
+        dataIndex: 'PRODUCT NAME',
+        key: 'result',
     },
 ];
 
-const data = [
-    {
-        key: '1',
-        name: '1',
-        age: 'Hardware',
-        address: <p style={{ color: 'green' }}>Green</p>,
-    },
-    {
-        key: '2',
-        name: '2',
-        age: 'Tools',
-        address: <p style={{ color: 'green' }}>Green</p>,
-    },
-    {
-        key: '3',
-        name: '3',
-        age: 'Pen drives',
-        address: <p style={{ color: 'green' }}>Green</p>,
-    },
-];
 
 const Camera: React.FC = () => {
     const videoRef = useRef<HTMLVideoElement>(null);
@@ -62,6 +37,8 @@ const Camera: React.FC = () => {
     const [qrData, setQrData] = useState('');
     const [error, setError] = useState('');
     const [messageApi, contextHolder] = msg.useMessage();
+    const [data, setData] = useState([]);
+
 
 
     const capture = () => {
@@ -74,17 +51,46 @@ const Camera: React.FC = () => {
         return () => clearInterval(interval); // Cleanup the interval on component unmount
     };
 
+    const TableFetchData = async () => {
+        try {
+            const response = await fetch('http://localhost:8000/all-qr-data/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+    
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+    
+            const data = await response.json();
+            
+            // Add serial number to each object in the array
+            const modifiedData = data.all_data.map((item: any, index: number) => ({
+                ...item,
+                serialNumber: index + 1,
+            }));
+    
+            setData(modifiedData);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+    
+
     useEffect(() => {
         capture();
+        TableFetchData();
     }, []);
 
 
     const warning = () => {
         messageApi.open({
-          type: 'error',
-          content: 'Oops! Some thing went wrong! Contact your Developer!',
+            type: 'error',
+            content: 'Oops! Some thing went wrong! Contact your Developer!',
         });
-      };
+    };
 
     const apiCallQrData = async () => {
         try {
@@ -92,30 +98,30 @@ const Camera: React.FC = () => {
             if (!(imageData instanceof Blob)) {
                 const falidtocap = () => {
                     messageApi.open({
-                      type: 'error',
-                      content: 'Failed to capture image data',
+                        type: 'error',
+                        content: 'Failed to capture image data',
                     });
-                  };
-                  falidtocap();
+                };
+                falidtocap();
                 throw new Error('Failed to capture image data');
             }
-            
+
             const formData = new FormData();
             formData.append('image_data', imageData, 'qr_image.png');
-    
+
             const response = await fetch('http://localhost:8000/scan-qr/', {
                 method: 'POST',
                 body: formData,
             });
-    
+
             if (!response.ok) {
                 warning();
                 throw new Error('Failed to scan QR code');
             }
-    
+
             const data = await response.json();
             setQrData(data.qr_data);
-            console.log(data.qr_data);
+            console.log(data);
             setError('');
         } catch (error) {
             console.error('Error:', error);
@@ -123,43 +129,43 @@ const Camera: React.FC = () => {
             setError('Failed to scan QR code');
         }
     };
-    
 
-      const captureImageIfQRCodeDetected = () => {
+
+    const captureImageIfQRCodeDetected = () => {
         // Ensure videoRef.current is not null
         if (!videoRef.current) {
             const VideoNot = () => {
                 messageApi.open({
-                  type: 'error',
-                  content: 'Video element not available',
+                    type: 'error',
+                    content: 'Video element not available',
                 });
-              };
+            };
             VideoNot();
             console.error("Video element not available");
             return;
         }
-    
+
         // Code to capture image if QR code is detected
         const canvas = document.createElement('canvas');
         canvas.width = videoRef.current.videoWidth;
         canvas.height = videoRef.current.videoHeight;
         const ctx = canvas.getContext('2d');
-    
+
         // Ensure ctx is not null
         if (!ctx) {
             console.error("Canvas context not available");
             const CanvaNot = () => {
                 messageApi.open({
-                  type: 'error',
-                  content: 'Canvas context not available!',
+                    type: 'error',
+                    content: 'Canvas context not available!',
                 });
-              };
-              CanvaNot();
+            };
+            CanvaNot();
             return;
         }
-    
+
         ctx.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
-    
+
         // Convert canvas image data to Blob
         return new Promise((resolve, reject) => {
             canvas.toBlob((blob) => {
@@ -178,6 +184,7 @@ const Camera: React.FC = () => {
 
     const showModalTable = () => {
         setIsModalOpen(true);
+        TableFetchData();
     };
 
     const handleCancelTable = () => {
@@ -220,11 +227,11 @@ const Camera: React.FC = () => {
         } catch (error) {
             const CameraError = () => {
                 messageApi.open({
-                  type: 'error',
-                  content: 'Error accessing camera!',
+                    type: 'error',
+                    content: 'Error accessing camera!',
                 });
-              };
-              CameraError();
+            };
+            CameraError();
             console.error('Error accessing camera:', error);
         }
     };
@@ -234,24 +241,24 @@ const Camera: React.FC = () => {
         if (videoElement && videoElement.srcObject) {
             const stream = videoElement.srcObject as MediaStream; // Type assertion
             const tracks = stream.getTracks();
-    
+
             tracks.forEach(track => {
                 track.stop();
             });
-    
+
             videoElement.srcObject = null;
             setCameraState(false);
         }
     };
-    
-    
+
+
 
     return (
         <div className='main-left-container'>
             <div className='live-camera'>
                 <video ref={videoRef} autoPlay playsInline />
-                { isCameraOpen == false && <Button onClick={handleStartCamera}>Open Camera</Button>}
-                { isCameraOpen && <Button onClick={handleCloseCamera}>Close Camera</Button>}
+                {isCameraOpen == false && <Button onClick={handleStartCamera}>Open Camera</Button>}
+                {isCameraOpen && <Button onClick={handleCloseCamera}>Close Camera</Button>}
             </div><br /><br /> <br />
 
             <div className='search-item'>
@@ -322,7 +329,7 @@ const Camera: React.FC = () => {
                 <Button type="primary" onClick={showModalTable}>
                     Click for the Prediction Table
                 </Button>
-                <Modal title="Prediction Table" open={isModalOpen} footer={null} onCancel={handleCancelTable}>
+                <Modal title="Prediction Table" visible={isModalOpen} footer={null} onCancel={handleCancelTable}>
                     <Table columns={columns} dataSource={data} />
                 </Modal>
             </div><br />
