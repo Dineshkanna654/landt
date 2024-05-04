@@ -42,13 +42,26 @@ const Camera: React.FC = () => {
 
 
     const capture = () => {
-        const interval = setInterval(() => {
-            // Check for QR code and capture image if found
-            captureImageIfQRCodeDetected();
-            apiCallQrData();
+        let picturesTaken = 0; // Counter for the number of pictures taken
+        const maxPictures = 9; // Maximum number of pictures to capture
+        const interval = setInterval(async () => {
+            try {
+                if (picturesTaken >= maxPictures) {
+                    clearInterval(interval); // Stop capturing if the limit is reached
+                    return;
+                }
+                // Capture image and wait for the result
+                const imageBlob = await captureImageIfQRCodeDetected();
+                // Make API call with the QR data
+                await apiCallQrData(imageBlob);
+                picturesTaken++; // Increment the counter
+            } catch (error) {
+                console.error('Error capturing image or making API call:', error);
+            }
         }, 7000);
-
-        return () => clearInterval(interval); // Cleanup the interval on component unmount
+    
+        // Cleanup the interval on component unmount
+        return () => clearInterval(interval);
     };
 
     const TableFetchData = async () => {
@@ -92,9 +105,9 @@ const Camera: React.FC = () => {
         });
     };
 
-    const apiCallQrData = async () => {
+    const apiCallQrData = async (imageData: unknown) => {
         try {
-            const imageData = await captureImageIfQRCodeDetected();
+            // const imageData = await captureImageIfQRCodeDetected();
             if (!(imageData instanceof Blob)) {
                 const falidtocap = () => {
                     messageApi.open({
