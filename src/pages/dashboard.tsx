@@ -134,7 +134,7 @@ const Dashboard: React.FC = () => {
           <Alert
             onClick={showModal}
             message="Completed Order"
-            description="45 Done!"
+            description={`${formData.length} Done!`}
             type="success"
             showIcon
           />
