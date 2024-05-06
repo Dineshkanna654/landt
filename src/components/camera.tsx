@@ -5,6 +5,8 @@ import type { DraggableData, DraggableEvent } from 'react-draggable';
 import Draggable from 'react-draggable';
 import SubmitButton from './submitButton';
 import { Table, message } from 'antd';
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf"; 
 
 
 const msg = message
@@ -21,6 +23,31 @@ const columns = [
         dataIndex: 'PRODUCT NAME',
         key: 'result',
     },
+    {
+        title: 'Rack Number',
+        dataIndex: 'RACK NO',
+        key: 'rack number',
+    },
+    {
+        title: 'Weight',
+        dataIndex: 'WEIGHT OF THE PRODUCT',
+        key: 'Weight',
+    },
+    {
+        title: 'MFG Date',
+        dataIndex: 'MANUFACTURING DATE',
+        key: 'MFG',
+    },
+    {
+        title: 'Quantity',
+        dataIndex: 'QUANTITY',
+        key: 'Qty',
+    },
+    {
+        title: 'Price',
+        dataIndex: 'PRICE',
+        key: 'Qty',
+    }
 ];
 
 
@@ -59,7 +86,7 @@ const Camera: React.FC = () => {
                 console.error('Error capturing image or making API call:', error);
             }
         }, 7000);
-    
+
         // Cleanup the interval on component unmount
         return () => clearInterval(interval);
     };
@@ -72,25 +99,25 @@ const Camera: React.FC = () => {
                     'Content-Type': 'application/json',
                 },
             });
-    
+
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-    
+
             const data = await response.json();
-            
+
             // Add serial number to each object in the array
             const modifiedData = data.all_data.map((item: any, index: number) => ({
                 ...item,
                 serialNumber: index + 1,
             }));
-    
+
             setData(modifiedData);
         } catch (error) {
             console.error('Error fetching data:', error);
         }
     };
-    
+
 
     useEffect(() => {
         capture();
@@ -230,6 +257,34 @@ const Camera: React.FC = () => {
     };
 
 
+    const generatePDF = async () => {
+        const content = document.querySelector(".table-pdf") as HTMLElement; // Type assertion
+        if (content) {
+          html2canvas(content).then((canvas) => {
+            const imgData = canvas.toDataURL("");
+            const pdf = new jsPDF();
+            const imgWidth = 210;
+            const pageHeight = 295;
+            const imgHeight = (canvas.height * imgWidth) / canvas.width;
+            let heightLeft = imgHeight;
+            let position = 0;
+    
+            pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+            heightLeft -= pageHeight;
+    
+            while (heightLeft >= 0) {
+              position = heightLeft - imgHeight;
+              pdf.addPage();
+              pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+              heightLeft -= pageHeight;
+            }
+            pdf.save("Table.pdf");
+          });
+        }
+      };
+    
+
+
     const handleStartCamera = async () => {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ video: true });
@@ -342,11 +397,15 @@ const Camera: React.FC = () => {
                 <Button type="primary" onClick={showModalTable}>
                     Click for the Prediction Table
                 </Button>
-                <Modal title="Prediction Table" visible={isModalOpen} footer={null} onCancel={handleCancelTable}>
-                    <Table columns={columns} dataSource={data} />
+                <Modal title="Prediction Table" visible={isModalOpen} footer={null} onCancel={handleCancelTable} width={700}>
+                    <div className='table-pdf'>
+                        <Table columns={columns} dataSource={data} />
+                        <div className='download-btn'>
+                            <Button type='primary' onClick={generatePDF}>Download</Button>
+                        </div>
+                    </div>
                 </Modal>
             </div><br />
-
         </div>
     );
 }

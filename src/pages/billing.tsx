@@ -9,11 +9,54 @@ import html2canvas from "html2canvas";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 const Invoice = () => {
-  const [numPages, setNumPages] = useState<number | null>(null); // Explicitly type numPages as number | null
+  const [numPages, setNumPages] = useState<number | null>(null);
+  const [editableValues, setEditableValues] = useState({
+    cell1: 'Enter Your Item Description!',
+    cell2: '',
+    cell3: '',
+    cell4: '',
+    cell5: '',
+  });
+  const [SubTotalValues, setSubTotalValues] = useState(0)
+
+  // setSubTotalValues(parseInt(editableValues.cell3)*parseInt(editableValues.cell4));
 
   const onDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
     // Explicitly type numPages as number
     setNumPages(numPages);
+  };
+
+
+  const calculateSubtotal = () => {
+    const { cell3, cell4 } = editableValues;
+    const parsedCell3 = parseInt(cell3);
+    const parsedCell4 = parseInt(cell4);
+    if (!isNaN(parsedCell3) && !isNaN(parsedCell4)) {
+      const newValue = parsedCell3 * parsedCell4;
+      setEditableValues(prevState => ({
+        ...prevState,
+        cell5: newValue.toString(),
+      }));
+    }
+  };
+
+  const handleSubTotalChange = (event: { target: { value: any; }; }, cell: string) => {
+    const { value } = event.target;
+    setEditableValues(prevState => ({
+      ...prevState,
+      [cell]: value,
+    }));
+    if (cell === 'cell3' || cell === 'cell4') {
+      calculateSubtotal();
+    }
+  };
+
+  const handleChange = (event: { target: { value: any; }; }, cell: any) => {
+    const { value } = event.target;
+    setEditableValues(prevState => ({
+      ...prevState,
+      [cell]: value,
+    }));
   };
 
   const currentDate = new Date().toLocaleDateString();
@@ -89,7 +132,7 @@ const Invoice = () => {
           <div className="customer-address">
             {customer_address.map((item, index) => (
               <div key={index} className="invoice-customer-address">
-                <div style={{ fontSize: "15px", fontWeight: "800", lineHeight: "30px"}}>Customer Address:</div>
+                <div style={{ fontSize: "15px", fontWeight: "800", lineHeight: "30px" }}>Customer Address:</div>
                 <div>{item.buliding}</div>
                 <div>{item.street}</div>
                 <div>{item.city}</div>
@@ -98,10 +141,10 @@ const Invoice = () => {
           </div>
           <br />
           <div className="table-responsive">
-            <table style={{width: "100%"}}>
+            <table style={{ width: "100%" }}>
               <thead>
                 <tr>
-                  <th style={{textAlign: "left"}}>Item and Description</th>
+                  <th style={{ textAlign: "left" }}>Item and Description</th>
                   <th>Tax</th>
                   <th>      </th>
                   <th>Qty</th>
@@ -110,36 +153,70 @@ const Invoice = () => {
                 </tr>
               </thead>
               <tr>
-              <td style={{textAlign: "left", lineHeight: "50px"}}>Eutable</td>
-                  <td style={{textAlign: "center"}}>Editable</td>
-                  <td>      </td>
-                  <td style={{textAlign: "center"}}>Editable</td>
-                  <td style={{textAlign: "center"}}>Editable</td>
-                  <td style={{textAlign: "center"}}>Editable</td>
+                <td style={{ textAlign: "left", lineHeight: "50px" }}>
+                  <input
+                    style={{ border: 'none' }}
+                    type="text"
+                    value={editableValues.cell1}
+                    onChange={(event) => handleChange(event, 'cell1')}
+                  />
+                </td>
+                <td style={{ textAlign: "center" }}>
+                  <input
+                    style={{ border: 'none', width: 20 }}
+                    type="text"
+                    id="tax"
+                    value={editableValues.cell2}
+                    onChange={(event) => handleChange(event, 'cell2')}
+                  />%
+                </td>
+                <td>      </td>
+                <td style={{ textAlign: "center" }}>
+                  <input
+                    style={{ border: 'none', width: 30 }}
+                    type="text"
+                    id="Qty"
+                    value={editableValues.cell3}
+                    onChange={(event) => handleChange(event, 'cell3')}
+                  />
+                </td>
+                <td style={{ textAlign: "center" }}>
+                  <input
+                    style={{ border: 'none', width: 25 }}
+                    type="text"
+                    id="Unit-price"
+                    value={editableValues.cell4}
+                    onChange={(event) => handleChange(event, 'cell4')}
+                  />₹
+                </td>
               </tr>
               <tr>
-              <td>     </td>
-              <td>      </td>
-              <td>      </td>
-              <td style={{textAlign: "center"}}>Sub Total</td>
-              <td>      </td>
-              <td style={{textAlign: "center"}}>Editable</td>
+                <td>     </td>
+                <td>      </td>
+                <td>      </td>
+                <td>      </td>
               </tr>
               <tr>
-              <td>     </td>
-              <td>      </td>
-              <td>      </td>
-              <td style={{textAlign: "center", lineHeight: "50px"}}>Standard Rate</td>
-              <td>      </td>
-              <td style={{textAlign: "center"}}>Editable</td>
+                <td>     </td>
+                <td>      </td>
+                <td>      </td>
+                <td style={{ textAlign: "center", lineHeight: "50px" }}>Sub Total</td>
+                <td>      </td>
+                <td style={{ textAlign: "center" }}>
+                  {(parseInt(editableValues.cell3) * parseInt(editableValues.cell4) + " ")}₹
+                </td>
               </tr>
               <tr>
-              <td>     </td>
-              <td>      </td>
-              <td>      </td>
-              <td style={{textAlign: "center", fontWeight:"800", backgroundColor:"rgb(201, 186, 214)"}} className="TOTAL" >TOTAL</td>
-              <td className="TOTAL" style={{backgroundColor:"rgb(201, 186, 214)"}}>      </td>
-              <td style={{textAlign: "center", fontWeight:"800", backgroundColor:"rgb(201, 186, 214)"}} className="TOTAL">Editable</td>
+                <td>     </td>
+                <td>      </td>
+                <td>      </td>
+                <td style={{ textAlign: "center", fontWeight: "800", backgroundColor: "rgb(201, 186, 214)" }} className="TOTAL" >TOTAL</td>
+                <td className="TOTAL" style={{ backgroundColor: "rgb(201, 186, 214)" }}>      </td>
+                <td style={{ textAlign: "center", fontWeight: "800", backgroundColor: "rgb(201, 186, 214)" }} className="TOTAL">
+                {
+                  ((parseInt(editableValues.cell3) * parseInt(editableValues.cell4)) * (1 + (parseInt(editableValues.cell2)/100)) + " ")
+                }₹
+                </td>
               </tr>
 
             </table>
