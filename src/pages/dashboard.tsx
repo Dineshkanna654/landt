@@ -100,7 +100,7 @@ const Dashboard: React.FC = () => {
             labelCol={{ flex: '110px' }}
             labelAlign="left"
             wrapperCol={{ flex: 8 }}
-            onFinish={handleSubmit} // Handle form submission
+            onFinish={handleSubmit} 
           >
             <Form.Item label="Owner" name="username" rules={[{ required: true, message: 'Please input the owner!' }]}>
               <Input />
