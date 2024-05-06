@@ -16,7 +16,6 @@ const columns = [
         title: 'Serial Number',
         dataIndex: 'serialNumber',
         key: 'serialNumber',
-        render: (text: any, record: any, index: number) => <span>{index + 1}</span>, // Generate serial number dynamically
     },
     {
         title: 'Prediction Result',
@@ -47,7 +46,16 @@ const columns = [
         title: 'Price',
         dataIndex: 'PRICE',
         key: 'Qty',
-    }
+    },
+    {
+        title: 'Color',
+        dataIndex: 'PRODUCT NAME',
+        key: 'color',
+        render: (text: any) => {
+            const color = text ? 'green' : 'red';
+            return <span style={{ color }}>{text ? 'Green' : 'Red'}</span>;
+        },
+    },
 ];
 
 
