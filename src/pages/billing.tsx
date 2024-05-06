@@ -214,7 +214,7 @@ const Invoice = () => {
                 <td className="TOTAL" style={{ backgroundColor: "rgb(201, 186, 214)" }}>      </td>
                 <td style={{ textAlign: "center", fontWeight: "800", backgroundColor: "rgb(201, 186, 214)" }} className="TOTAL">
                 {
-                  ((parseInt(editableValues.cell3) * parseInt(editableValues.cell4)) * (1 + (parseInt(editableValues.cell2)/100)) + " ")
+                  (((parseInt(editableValues.cell3) * parseInt(editableValues.cell4)) * (1 + (parseInt(editableValues.cell2)/100))).toFixed(2) + " ")
                 }₹
                 </td>
               </tr>
